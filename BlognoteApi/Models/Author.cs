@@ -4,12 +4,8 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace BlognoteApi.Models
 {
-    public class Author
+    public class Author : EntityBase
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-
         [BsonElement("userId")]
         public string UserId { get; set; }
 
