@@ -13,16 +13,21 @@ namespace BlognoteApi.Services
             get;
         }
 
-        public ServiceBase(IBlognoteDatabaseSettings settings)
+        protected IMongoDatabase Database
+        {
+            get;
+        }
+
+        public ServiceBase(IBlognoteDatabaseSettings settings, string collectionName)
         {
             var client = new MongoClient(settings.ConnectionString);
-            IMongoDatabase database = client.GetDatabase(settings.DatabaseName);
-            Entities = database.GetCollection<TBase>(settings.AuthorsCollectionName);
+            Database = client.GetDatabase(settings.DatabaseName);
+            Entities = Database.GetCollection<TBase>(collectionName);
         }
 
         public List<TBase> Get()
         {
-            List<TBase> entities = Entities.Find(author => true).ToList();
+            List<TBase> entities = Entities.Find(entity => true).ToList();
             foreach (TBase entity in entities)
                 this.MapEntityProperties(entity);
             return entities;
@@ -30,7 +35,7 @@ namespace BlognoteApi.Services
 
         public TBase Get(string id)
         {
-            TBase entity = Entities.Find(author => author.Id == id).FirstOrDefault();
+            TBase entity = Entities.Find(entity => entity.Id == id).FirstOrDefault();
             this.MapEntityProperties(entity);
             return entity;
         }

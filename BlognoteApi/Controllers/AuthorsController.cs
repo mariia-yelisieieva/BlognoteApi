@@ -1,61 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
 using BlognoteApi.Models;
 using BlognoteApi.Services;
+using BlognoteApi.Utility;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlognoteApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthorsController : ControllerBase
+    public class AuthorsController : EntityControllerBase<Author, AuthorService>
     {
-        private readonly AuthorService authorService;
-
-        public AuthorsController(AuthorService authorService)
+        public AuthorsController(AuthorService authorService, JsonSerializer serializer) 
+            : base(authorService, serializer)
         {
-            this.authorService = authorService;
-        }
-
-        [HttpGet]
-        public ActionResult<List<Author>> Get() => authorService.Get();
-
-        [HttpGet("{id:length(24)}", Name = "GetAuthor")]
-        public ActionResult<Author> Get(string id)
-        {
-            Author author = authorService.Get(id);
-            if (author == null)
-                return NotFound();
-
-            return author;
         }
 
         [HttpPost]
         public ActionResult<Author> Create(Author author)
         {
-            authorService.Create(author);
+            EntityService.Create(author);
             return CreatedAtRoute("GetAuthor", new { id = author.Id.ToString() }, author);
         }
 
         [HttpPut("{id:length(24)}")]
         public IActionResult Update(string id, Author authorIn)
         {
-            Author author = authorService.Get(id);
+            Author author = EntityService.Get(id);
             if (author == null)
                 return NotFound();
 
-            authorService.Update(id, authorIn);
+            EntityService.Update(id, authorIn);
             return NoContent();
         }
 
         [HttpDelete("{id:length(24)}")]
         public IActionResult Delete(string id)
         {
-            Author author = authorService.Get(id);
+            Author author = EntityService.Get(id);
             if (author == null)
                 return NotFound();
 
-            authorService.Remove(author.Id);
+            EntityService.Remove(author.Id);
             return NoContent();
         }
     }

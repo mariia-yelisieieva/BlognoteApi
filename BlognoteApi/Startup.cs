@@ -1,11 +1,13 @@
 using System;
 using BlognoteApi.Services;
+using BlognoteApi.Utility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson.Serialization.Conventions;
 
 namespace BlognoteApi
 {
@@ -21,11 +23,16 @@ namespace BlognoteApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ConventionRegistry.Register("Camel case convention",
+                new ConventionPack { new CamelCaseElementNameConvention() }, type => true);
+
             services.Configure<BlognoteDatabaseSettings>(Configuration.GetSection(nameof(BlognoteDatabaseSettings)));
 
             services.AddSingleton<IBlognoteDatabaseSettings>(sp => sp.GetRequiredService<IOptions<BlognoteDatabaseSettings>>().Value);
 
+            services.AddSingleton<JsonSerializer>();
             services.AddSingleton<AuthorService>();
+            services.AddSingleton<ArticleService>();
 
             services.AddControllers();
         }

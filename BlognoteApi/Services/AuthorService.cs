@@ -6,7 +6,8 @@ namespace BlognoteApi.Services
 {
     public class AuthorService : ServiceBase<Author>
     {
-        public AuthorService(IBlognoteDatabaseSettings settings) : base(settings)
+        public AuthorService(IBlognoteDatabaseSettings settings)
+            : base(settings, settings.AuthorsCollectionName)
         {
         }
 

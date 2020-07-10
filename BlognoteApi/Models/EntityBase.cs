@@ -4,7 +4,6 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace BlognoteApi.Models
 {
-    [BsonIgnoreExtraElements]
     public class EntityBase
     {
         [BsonId]
