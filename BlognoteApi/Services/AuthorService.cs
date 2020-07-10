@@ -6,9 +6,11 @@ namespace BlognoteApi.Services
 {
     public class AuthorService : ServiceBase<Author>
     {
-        public AuthorService(IBlognoteDatabaseSettings settings)
-            : base(settings, settings.AuthorsCollectionName)
+        private readonly IMongoCollection<Article> articles;
+
+        public AuthorService(IBlognoteDatabaseSettings settings) : base(settings, settings.AuthorsCollectionName)
         {
+            articles = Database.GetCollection<Article>(settings.ArticlesCollectionName);
         }
 
         public Author Create(Author author)
@@ -25,5 +27,10 @@ namespace BlognoteApi.Services
 
         public void Remove(string id) =>
             Entities.DeleteOne(author => author.Id == id);
+
+        protected override void MapEntityProperties(Author author)
+        {
+            author.ArticlesCount = Convert.ToInt16(articles.Count(article => article.AuthorId == author.Id));
+        }
     }
 }

@@ -34,6 +34,8 @@ namespace BlognoteApi
             services.AddSingleton<AuthorService>();
             services.AddSingleton<ArticleService>();
 
+            services.AddCors();
+
             services.AddControllers();
         }
 
@@ -47,6 +49,7 @@ namespace BlognoteApi
 
             app.UseRouting();
 
+            app.UseCors(builder => builder.AllowAnyOrigin());
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
