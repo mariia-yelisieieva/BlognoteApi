@@ -1,12 +1,15 @@
 ﻿using System;
+using BlognoteApi.Utility;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 
 namespace BlognoteApi.Models.Blocks
 {
     [BsonIgnoreExtraElements]
     [BsonDiscriminator(RootClass = true)]
     [BsonKnownTypes(typeof(TextBlock), typeof(ImageBlock), typeof(QuoteBlock))]
-    public abstract class BaseBlock
+    [JsonConverter(typeof(BaseBlockJsonConverter))]
+    public class BaseBlock
     {
         public int BlockId { get; set; }
 

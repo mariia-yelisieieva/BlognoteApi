@@ -15,12 +15,12 @@ namespace BlognoteApi.Controllers
         {
             get;
         }
-        protected JsonSerializer Serializer
+        protected CustomJsonSerializer Serializer
         {
             get;
         }
 
-        public EntityControllerBase(TEntityService entityService, JsonSerializer serializer)
+        public EntityControllerBase(TEntityService entityService, CustomJsonSerializer serializer)
         {
             this.EntityService = entityService;
             this.Serializer = serializer;

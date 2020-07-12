@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace BlognoteApi.Utility
 {
-    public class JsonSerializer
+    public class CustomJsonSerializer
     {
         public string SerializeWithDerivedClasses(object objectToSerialize)
         {

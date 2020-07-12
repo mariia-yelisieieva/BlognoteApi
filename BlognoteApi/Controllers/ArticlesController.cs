@@ -2,6 +2,7 @@
 using BlognoteApi.Models;
 using BlognoteApi.Services;
 using BlognoteApi.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlognoteApi.Controllers
@@ -10,11 +11,12 @@ namespace BlognoteApi.Controllers
     [ApiController]
     public class ArticlesController : EntityControllerBase<Article, ArticleService>
     {
-        public ArticlesController(ArticleService articleService, JsonSerializer serializer) 
+        public ArticlesController(ArticleService articleService, CustomJsonSerializer serializer) 
             : base(articleService, serializer)
         {
         }
 
+        //[Authorize(Policy = "Consumer")]
         [HttpPost]
         public ActionResult<Article> Create(Article article)
         {
@@ -22,17 +24,19 @@ namespace BlognoteApi.Controllers
             return CreatedAtRoute("GetArticle", new { id = article.Id.ToString() }, article);
         }
 
-        [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, Article articleIn)
+        //[Authorize(Policy = "Consumer")]
+        [HttpPut("update")]
+        public IActionResult Update(Article article)
         {
-            Article article = EntityService.Get(id);
-            if (article == null)
+            Article foundArticle = EntityService.Get(article.Id);
+            if (foundArticle == null)
                 return NotFound();
 
-            EntityService.Update(id, articleIn);
+            EntityService.Update(article);
             return NoContent();
         }
 
+        //[Authorize(Policy = "Consumer")]
         [HttpDelete("{id:length(24)}")]
         public IActionResult Delete(string id)
         {

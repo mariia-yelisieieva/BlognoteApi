@@ -20,8 +20,8 @@ namespace BlognoteApi.Services
             return article;
         }
 
-        public void Update(string id, Article articleIn) =>
-            Entities.ReplaceOne(article => article.Id == id, articleIn);
+        public void Update(Article articleIn) =>
+            Entities.ReplaceOne(article => article.Id == articleIn.Id, articleIn);
 
         public void Remove(Article articleIn) =>
             Entities.DeleteOne(article => article.Id == articleIn.Id);
@@ -31,6 +31,8 @@ namespace BlognoteApi.Services
 
         protected override void MapEntityProperties(Article article)
         {
+            if (article == null)
+                return;
             article.Author = this.authors.Find(author => author.Id == article.AuthorId).FirstOrDefault();
         }
     }

@@ -30,7 +30,7 @@ namespace BlognoteApi.Services
 
         protected override void MapEntityProperties(Author author)
         {
-            author.ArticlesCount = Convert.ToInt16(articles.Count(article => article.AuthorId == author.Id));
+            author.ArticlesCount = Convert.ToInt16(articles.CountDocuments(article => article.AuthorId == author.Id));
         }
     }
 }

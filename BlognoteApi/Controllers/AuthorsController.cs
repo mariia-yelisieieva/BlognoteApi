@@ -2,6 +2,7 @@
 using BlognoteApi.Models;
 using BlognoteApi.Services;
 using BlognoteApi.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlognoteApi.Controllers
@@ -10,7 +11,7 @@ namespace BlognoteApi.Controllers
     [ApiController]
     public class AuthorsController : EntityControllerBase<Author, AuthorService>
     {
-        public AuthorsController(AuthorService authorService, JsonSerializer serializer) 
+        public AuthorsController(AuthorService authorService, CustomJsonSerializer serializer) 
             : base(authorService, serializer)
         {
         }
@@ -22,6 +23,7 @@ namespace BlognoteApi.Controllers
             return CreatedAtRoute("GetAuthor", new { id = author.Id.ToString() }, author);
         }
 
+        //[Authorize(Policy = "Consumer")]
         [HttpPut("{id:length(24)}")]
         public IActionResult Update(string id, Author authorIn)
         {
@@ -33,6 +35,7 @@ namespace BlognoteApi.Controllers
             return NoContent();
         }
 
+        //[Authorize(Policy = "Consumer")]
         [HttpDelete("{id:length(24)}")]
         public IActionResult Delete(string id)
         {
