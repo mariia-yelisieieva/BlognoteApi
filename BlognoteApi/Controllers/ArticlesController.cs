@@ -4,6 +4,7 @@ using BlognoteApi.Services;
 using BlognoteApi.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace BlognoteApi.Controllers
 {
@@ -17,11 +18,11 @@ namespace BlognoteApi.Controllers
         }
 
         //[Authorize(Policy = "Consumer")]
-        [HttpPost]
+        [HttpPost("create")]
         public ActionResult<Article> Create(Article article)
         {
-            EntityService.Create(article);
-            return CreatedAtRoute("GetArticle", new { id = article.Id.ToString() }, article);
+            article = EntityService.Create(article);
+            return Ok(JsonConvert.SerializeObject(article.Id));
         }
 
         //[Authorize(Policy = "Consumer")]

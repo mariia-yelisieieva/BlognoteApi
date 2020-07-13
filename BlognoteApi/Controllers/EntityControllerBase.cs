@@ -34,7 +34,7 @@ namespace BlognoteApi.Controllers
             return Ok(serialized);
         }
 
-        [HttpGet("{id:length(24)}")]
+        [HttpGet("{id}")]
         public ActionResult<TEntity> Get(string id)
         {
             TEntity entity = EntityService.Get(id);
