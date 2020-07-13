@@ -38,7 +38,7 @@ namespace BlognoteApi.Controllers
         }
 
         //[Authorize(Policy = "Consumer")]
-        [HttpDelete("{id:length(24)}")]
+        [HttpDelete("remove/{id}")]
         public IActionResult Delete(string id)
         {
             Article article = EntityService.Get(id);
