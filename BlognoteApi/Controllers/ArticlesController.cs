@@ -4,7 +4,6 @@ using BlognoteApi.Services;
 using BlognoteApi.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace BlognoteApi.Controllers
 {
@@ -15,14 +14,6 @@ namespace BlognoteApi.Controllers
         public ArticlesController(ArticleService articleService, CustomJsonSerializer serializer) 
             : base(articleService, serializer)
         {
-        }
-
-        //[Authorize(Policy = "Consumer")]
-        [HttpPost("create")]
-        public ActionResult<Article> Create(Article article)
-        {
-            article = EntityService.Create(article);
-            return Ok(JsonConvert.SerializeObject(article.Id));
         }
 
         //[Authorize(Policy = "Consumer")]

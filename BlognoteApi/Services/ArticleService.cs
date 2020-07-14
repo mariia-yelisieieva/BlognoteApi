@@ -14,12 +14,6 @@ namespace BlognoteApi.Services
             authors = Database.GetCollection<Author>(settings.AuthorsCollectionName);
         }
 
-        public Article Create(Article article)
-        {
-            Entities.InsertOne(article);
-            return article;
-        }
-
         public void Update(Article articleIn) =>
             Entities.ReplaceOne(article => article.Id == articleIn.Id, articleIn);
 

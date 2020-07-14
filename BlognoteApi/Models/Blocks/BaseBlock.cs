@@ -9,7 +9,7 @@ namespace BlognoteApi.Models.Blocks
     [BsonDiscriminator(RootClass = true)]
     [BsonKnownTypes(typeof(TextBlock), typeof(ImageBlock), typeof(QuoteBlock))]
     [JsonConverter(typeof(BaseBlockJsonConverter))]
-    public class BaseBlock
+    public abstract class BaseBlock
     {
         public int BlockId { get; set; }
 

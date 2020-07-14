@@ -40,6 +40,12 @@ namespace BlognoteApi.Services
             return entity;
         }
 
+        public TBase Create(TBase entity)
+        {
+            Entities.InsertOne(entity);
+            return entity;
+        }
+
         protected virtual void MapEntityProperties(TBase entity)
         {
         }

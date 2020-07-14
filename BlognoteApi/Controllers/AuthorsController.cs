@@ -16,13 +16,6 @@ namespace BlognoteApi.Controllers
         {
         }
 
-        [HttpPost]
-        public ActionResult<Author> Create(Author author)
-        {
-            EntityService.Create(author);
-            return CreatedAtRoute("GetAuthor", new { id = author.Id.ToString() }, author);
-        }
-
         //[Authorize(Policy = "Consumer")]
         [HttpPut("{id:length(24)}")]
         public IActionResult Update(string id, Author authorIn)
@@ -32,18 +25,6 @@ namespace BlognoteApi.Controllers
                 return NotFound();
 
             EntityService.Update(id, authorIn);
-            return NoContent();
-        }
-
-        //[Authorize(Policy = "Consumer")]
-        [HttpDelete("{id:length(24)}")]
-        public IActionResult Delete(string id)
-        {
-            Author author = EntityService.Get(id);
-            if (author == null)
-                return NotFound();
-
-            EntityService.Remove(author.Id);
             return NoContent();
         }
     }

@@ -1,10 +1,13 @@
 ﻿using System;
+using BlognoteApi.Utility;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 
 namespace BlognoteApi.Models
 {
-    public class EntityBase
+    [JsonConverter(typeof(EntityBaseJsonConverter))]
+    public abstract class EntityBase
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

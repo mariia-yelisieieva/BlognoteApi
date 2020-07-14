@@ -4,6 +4,7 @@ using BlognoteApi.Models;
 using BlognoteApi.Services;
 using BlognoteApi.Utility;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace BlognoteApi.Controllers
 {
@@ -43,6 +44,14 @@ namespace BlognoteApi.Controllers
 
             string serialized = Serializer.SerializeWithDerivedClasses(entity);
             return Ok(serialized);
+        }
+
+        //[Authorize(Policy = "Consumer")]
+        [HttpPost("create")]
+        public ActionResult<TEntity> Create(TEntity entity)
+        {
+            entity = EntityService.Create(entity);
+            return Ok(JsonConvert.SerializeObject(entity.Id));
         }
     }
 }
