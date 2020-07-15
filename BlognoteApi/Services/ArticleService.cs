@@ -14,9 +14,6 @@ namespace BlognoteApi.Services
             authors = Database.GetCollection<Author>(settings.AuthorsCollectionName);
         }
 
-        public void Update(Article articleIn) =>
-            Entities.ReplaceOne(article => article.Id == articleIn.Id, articleIn);
-
         public void Remove(Article articleIn) =>
             Entities.DeleteOne(article => article.Id == articleIn.Id);
 

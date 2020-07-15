@@ -53,5 +53,17 @@ namespace BlognoteApi.Controllers
             entity = EntityService.Create(entity);
             return Ok(JsonConvert.SerializeObject(entity.Id));
         }
+
+        //[Authorize(Policy = "Consumer")]
+        [HttpPut("update")]
+        public IActionResult Update(TEntity entity)
+        {
+            TEntity foundEntity = EntityService.Get(entity.Id);
+            if (foundEntity == null)
+                return NotFound();
+
+            EntityService.Update(entity);
+            return NoContent();
+        }
     }
 }

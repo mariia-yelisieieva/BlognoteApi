@@ -46,6 +46,9 @@ namespace BlognoteApi.Services
             return entity;
         }
 
+        public void Update(TBase entityToUpdate) =>
+            Entities.ReplaceOne(entity => entity.Id == entityToUpdate.Id, entityToUpdate);
+
         protected virtual void MapEntityProperties(TBase entity)
         {
         }

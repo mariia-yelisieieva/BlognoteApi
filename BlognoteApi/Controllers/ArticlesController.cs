@@ -17,18 +17,6 @@ namespace BlognoteApi.Controllers
         }
 
         //[Authorize(Policy = "Consumer")]
-        [HttpPut("update")]
-        public IActionResult Update(Article article)
-        {
-            Article foundArticle = EntityService.Get(article.Id);
-            if (foundArticle == null)
-                return NotFound();
-
-            EntityService.Update(article);
-            return NoContent();
-        }
-
-        //[Authorize(Policy = "Consumer")]
         [HttpDelete("remove/{id}")]
         public IActionResult Delete(string id)
         {

@@ -15,17 +15,5 @@ namespace BlognoteApi.Controllers
             : base(authorService, serializer)
         {
         }
-
-        //[Authorize(Policy = "Consumer")]
-        [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, Author authorIn)
-        {
-            Author author = EntityService.Get(id);
-            if (author == null)
-                return NotFound();
-
-            EntityService.Update(id, authorIn);
-            return NoContent();
-        }
     }
 }
