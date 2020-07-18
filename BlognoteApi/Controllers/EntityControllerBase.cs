@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BlognoteApi.Models;
 using BlognoteApi.Services;
 using BlognoteApi.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -46,7 +47,7 @@ namespace BlognoteApi.Controllers
             return Ok(serialized);
         }
 
-        //[Authorize(Policy = "Consumer")]
+        [Authorize(Policy = "Consumer")]
         [HttpPost("create")]
         public ActionResult<TEntity> Create(TEntity entity)
         {
@@ -54,7 +55,7 @@ namespace BlognoteApi.Controllers
             return Ok(JsonConvert.SerializeObject(entity.Id));
         }
 
-        //[Authorize(Policy = "Consumer")]
+        [Authorize(Policy = "Consumer")]
         [HttpPut("update")]
         public IActionResult Update(TEntity entity)
         {

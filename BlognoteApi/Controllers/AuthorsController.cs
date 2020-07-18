@@ -2,7 +2,6 @@
 using BlognoteApi.Models;
 using BlognoteApi.Services;
 using BlognoteApi.Utility;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlognoteApi.Controllers

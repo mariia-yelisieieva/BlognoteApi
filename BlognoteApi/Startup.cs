@@ -26,28 +26,6 @@ namespace BlognoteApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //}).AddJwtBearer(bearerOptions =>
-            //{
-            //    bearerOptions.Authority = "http://localhost:5000";
-            //    bearerOptions.Audience = "resourceapi";
-            //    bearerOptions.RequireHttpsMetadata = false;
-            //});
-
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("ApiReader", policy => policy.RequireClaim("scope", "api.read"));
-            //    options.AddPolicy("Consumer", policy => policy.RequireClaim(ClaimTypes.Role, "consumer"));
-            //});
-
-            //services.AddMvc(options =>
-            //{
-            //    options.EnableEndpointRouting = false;
-            //}).SetCompatibilityVersion(CompatibilityVersion.Latest);
-
             ConventionRegistry.Register("Camel case convention",
                 new ConventionPack { new CamelCaseElementNameConvention() }, type => true);
             services.Configure<BlognoteDatabaseSettings>(Configuration.GetSection(nameof(BlognoteDatabaseSettings)));
@@ -59,7 +37,29 @@ namespace BlognoteApi
 
             services.AddCors();
 
-            services.AddControllers().AddNewtonsoftJson();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(bearerOptions =>
+            {
+                bearerOptions.Authority = "http://localhost:5000";
+                bearerOptions.Audience = "resourceapi";
+                bearerOptions.RequireHttpsMetadata = false;
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiReader", policy => policy.RequireClaim("scope", "api.read"));
+                options.AddPolicy("Consumer", policy => policy.RequireClaim(ClaimTypes.Role, "consumer"));
+            });
+
+            services.AddMvc(options =>
+            {
+                options.EnableEndpointRouting = false;
+            })
+                .SetCompatibilityVersion(CompatibilityVersion.Latest)
+                .AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,11 +74,9 @@ namespace BlognoteApi
 
             app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             app.UseAuthorization();
+            app.UseAuthentication();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseMvc();
         }
     }
 }
