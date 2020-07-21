@@ -1,6 +1,6 @@
 using System;
 using System.Security.Claims;
-using BlognoteApi.Services;
+using BlognoteApi.Extensions;
 using BlognoteApi.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using MongoDB.Bson.Serialization.Conventions;
 
 namespace BlognoteApi
 {
@@ -26,14 +24,8 @@ namespace BlognoteApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            ConventionRegistry.Register("Camel case convention",
-                new ConventionPack { new CamelCaseElementNameConvention() }, type => true);
-            services.Configure<BlognoteDatabaseSettings>(Configuration.GetSection(nameof(BlognoteDatabaseSettings)));
-            services.AddSingleton<IBlognoteDatabaseSettings>(sp => sp.GetRequiredService<IOptions<BlognoteDatabaseSettings>>().Value);
-
-            services.AddSingleton<CustomJsonSerializer>();
-            services.AddSingleton<AuthorService>();
-            services.AddSingleton<ArticleService>();
+            services.AddMongoDbConnection(this.Configuration);
+            services.AddCustomServices();
 
             services.AddCors();
 
@@ -50,14 +42,11 @@ namespace BlognoteApi
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("ApiReader", policy => policy.RequireClaim("scope", "api.read"));
-                options.AddPolicy("Consumer", policy => policy.RequireClaim(ClaimTypes.Role, "consumer"));
+                options.AddPolicy(AuthorizationPolicyName.Reader, policy => policy.RequireClaim("scope", "api.read"));
+                options.AddPolicy(AuthorizationPolicyName.Consumer, policy => policy.RequireClaim(ClaimTypes.Role, "consumer"));
             });
 
-            services.AddMvc(options =>
-            {
-                options.EnableEndpointRouting = false;
-            })
+            services.AddControllers(options => options.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(CompatibilityVersion.Latest)
                 .AddNewtonsoftJson();
         }

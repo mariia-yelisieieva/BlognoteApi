@@ -47,7 +47,7 @@ namespace BlognoteApi.Controllers
             return Ok(serialized);
         }
 
-        [Authorize(Policy = "Consumer")]
+        [Authorize(Policy = AuthorizationPolicyName.Consumer)]
         [HttpPost("create")]
         public ActionResult<TEntity> Create(TEntity entity)
         {
@@ -55,7 +55,7 @@ namespace BlognoteApi.Controllers
             return Ok(JsonConvert.SerializeObject(entity.Id));
         }
 
-        [Authorize(Policy = "Consumer")]
+        [Authorize(Policy = AuthorizationPolicyName.Consumer)]
         [HttpPut("update")]
         public IActionResult Update(TEntity entity)
         {

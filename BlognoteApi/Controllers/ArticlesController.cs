@@ -16,7 +16,7 @@ namespace BlognoteApi.Controllers
         {
         }
 
-        [Authorize(Policy = "Consumer")]
+        [Authorize(Policy = AuthorizationPolicyName.Consumer)]
         [HttpDelete("remove/{id}")]
         public IActionResult Delete(string id)
         {
